@@ -1,137 +1,417 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-<meta charset="UTF-8">
-<title>Customer Support — Test UI</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Synevo Customers Support — UI</title>
 
 <style>
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #1f5fa8;
-    color: #fff;
-}
+  :root{
+    --bg:#2a66b7;
+    --bg2:#2f6fc3;
+    --top:#1e5aa8;
+    --line:rgba(255,255,255,.16);
+    --line2:rgba(0,0,0,.20);
+    --text:#eaf2ff;
+    --yellow:#f3c128;
+    --yellow2:#e9b71e;
+  }
 
-.header {
-    padding: 12px 20px;
-    background: #1b4f8a;
-    font-size: 18px;
-    font-weight: bold;
-}
+  *{ box-sizing:border-box; }
+  body{
+    margin:0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
+    color: var(--text);
+  }
 
-/* ===== КНОПКИ В ОДИН РЯД ===== */
-.buttons {
-    padding: 10px 20px;
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-}
+  .page{ display:none; min-height:100vh; }
+  .page.active{ display:block; }
 
-.button {
-    background: #f4c430;
-    color: #000;
-    border: none;
-    padding: 8px 14px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    white-space: nowrap;
-}
+  /* ===== TOP BAR ===== */
+  .topbar{
+    height:48px;
+    display:flex;
+    align-items:center;
+    padding:0 16px;
+    background: linear-gradient(180deg, #1f5fb0 0%, #1b529b 100%);
+    border-bottom:1px solid var(--line2);
+  }
+  .brand{ font-weight:700; font-size:14px; letter-spacing:.2px; }
+  .brand .light{ font-weight:600; opacity:.95; }
+  .spacer{ flex:1; }
+  .gear{
+    width:28px;height:28px;border-radius:6px;
+    display:grid;place-items:center;
+    border:1px solid rgba(255,255,255,.25);
+    opacity:.9;
+  }
 
-/* ===== ФІЛЬТРИ ===== */
-.filters {
-    display: flex;
-    gap: 10px;
-    padding: 10px 20px;
-}
+  /* ===== TABS ===== */
+  .tabs{
+    display:flex;
+    gap:10px;
+    padding:10px 14px 6px;
+    flex-wrap:wrap;
+  }
+  .tab{
+    background: linear-gradient(180deg, var(--yellow) 0%, var(--yellow2) 100%);
+    color:#123;
+    border:1px solid rgba(0,0,0,.18);
+    padding:7px 14px;
+    border-radius:4px;
+    font-size:13px;
+    font-weight:700;
+    cursor:pointer;
+    box-shadow: 0 1px 0 rgba(255,255,255,.25) inset;
+    white-space:nowrap;
+  }
 
-.filters input {
-    padding: 8px;
-    border-radius: 4px;
-    border: none;
-    width: 180px;
-}
+  /* ===== FILTERS ===== */
+  .filters{ padding:6px 14px 10px; }
+  .filters-row{
+    display:grid;
+    grid-template-columns: 220px 220px 220px 260px;
+    gap:10px;
+    max-width: 1040px;
+  }
+  .f{
+    height:34px;
+    border-radius:4px;
+    border:1px solid rgba(255,255,255,.22);
+    background: rgba(0,0,0,.08);
+    padding:0 10px;
+    color: var(--text);
+    outline:none;
+    font-size:13px;
+  }
+  .f::placeholder{ color: rgba(234,242,255,.7); }
 
-/* ===== ТАБЛИЦЯ ===== */
-.table-container {
-    padding: 20px;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: #2b6fb9;
-}
-
-th, td {
-    border: 1px solid #1b4f8a;
-    padding: 6px;
-    text-align: center;
-}
-
-th {
-    background: #1b4f8a;
-    font-size: 13px;
-}
-
-td input {
-    width: 100%;
+  /* ===== TABLE (плотно, как на фото) ===== */
+  .table-wrap{ padding: 8px 14px 18px; }
+  table.grid{
+    width:100%;
+    border-collapse:collapse;             /* без зазоров */
+    background: rgba(0,0,0,.08);
+    border:1px solid rgba(255,255,255,.18);
+  }
+  .grid thead th{
+    height:32px;
+    font-size:12px;
+    font-weight:700;
+    color:rgba(255,255,255,.95);
+    background: rgba(0,0,0,.14);
+    border-right:1px solid rgba(255,255,255,.14);
+    border-bottom:1px solid rgba(255,255,255,.18);
+    text-align:left;
+    padding:0 10px;
+    white-space:nowrap;
+  }
+  .grid tbody td{
+    height:30px;
+    border-right:1px solid rgba(255,255,255,.10);
+    border-bottom:1px solid rgba(255,255,255,.10);
+    padding:0;                            /* плотнее */
+  }
+  .cell{
+    width:100%;
+    height:30px;
+    border:0;
+    outline:none;
     background: transparent;
-    border: none;
-    color: #fff;
-    text-align: center;
-    outline: none;
-}
+    color: var(--text);
+    padding:0 8px;                        /* минимальный внутренний отступ */
+    font-size:12.5px;
+  }
+
+  /* widths close to CRM look */
+  .w-date{ width:120px; }
+  .w-code{ width:80px; }
+  .w-bar{ width:80px; }
+  .w-status{ width:120px; }
+  .w-client{ width:220px; }
+  .w-dn{ width:110px; }
+  .w-email{ width:200px; }
+  .w-sum{ width:90px; }
+  .w-serv{ width:auto; }
+
+  /* ===== PAGE 2 PANEL ===== */
+  .panel{
+    max-width: 1100px;
+    margin: 18px auto;
+    border-radius: 6px;
+    overflow:hidden;
+    border: 1px solid rgba(255,255,255,.20);
+    background: rgba(255,255,255,.08);
+    box-shadow: 0 8px 24px rgba(0,0,0,.25);
+  }
+  .panel-head{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 12px;
+    background: rgba(0,0,0,.18);
+    border-bottom: 1px solid rgba(255,255,255,.18);
+  }
+  .close{
+    width:28px;height:28px;border-radius:4px;
+    border:1px solid rgba(255,255,255,.25);
+    display:grid;place-items:center;
+    cursor:pointer;
+    font-weight:700;
+    user-select:none;
+  }
+  .panel-title{ font-weight:700; font-size:16px; }
+
+  .panel-body{ padding:14px; }
+  .
+    lookup{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:10px;
+    flex-wrap:wrap;
+  }
+  .phone{
+    width:260px;
+    height:36px;
+    border-radius:4px;
+    border:1px solid rgba(255,255,255,.22);
+    background: rgba(255,255,255,.12);
+    color:var(--text);
+    padding:0 10px;
+    outline:none;
+    font-size:13px;
+  }
+  .btn-check{
+    height:36px;
+    padding:0 18px;
+    border-radius:4px;
+    border:1px solid rgba(0,0,0,.18);
+    background: linear-gradient(180deg, var(--yellow) 0%, var(--yellow2) 100%);
+    font-weight:800;
+    cursor:pointer;
+  }
+  .info{
+    font-size:13px;
+    color: rgba(255,255,255,.92);
+    margin: 8px 0 12px;
+  }
+  .info b{ color: rgba(255,255,255,.95); }
+  .section-title{
+    text-align:center;
+    font-weight:700;
+    margin: 6px 0 10px;
+    color: rgba(255,255,255,.92);
+  }
+
+  .services{
+    border-radius:6px;
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,.18);
+    background: rgba(255,255,255,.06);
+  }
+  .services-head{
+    display:grid;
+    grid-template-columns: 1fr 140px;
+    background: rgba(0,0,0,.12);
+    border-bottom:1px solid rgba(255,255,255,.16);
+    font-weight:700;
+    font-size:13px;
+    padding:10px 12px;
+  }
+  .service-row{
+    display:grid;
+    grid-template-columns: 1fr 140px;
+    padding:12px;
+    border-bottom:1px solid rgba(255,255,255,.10);
+    gap:10px;
+    align-items:start;
+  }
+  .service-row:last-child{ border-bottom:none; }
+  .svc-name{ font-size:13px; line-height:1.35; color: rgba(255,255,255,.95); }
+  .svc-price{ text-align:right; font-weight:700; color: rgba(255,255,255,.92); white-space:nowrap; }
+
+  .fake-scroll{
+    height:10px;
+    margin:10px 4px 0;
+    background: rgba(0,0,0,.18);
+    border-radius:999px;
+    position:relative;
+  }
+  .fake-scroll::after{
+    content:"";
+    position:absolute;
+    left:18%;
+    top:2px;
+    height:6px;
+    width:44%;
+    border-radius:999px;
+    background: rgba(255,255,255,.28);
+  }
+
+  @media (max-width: 980px){
+    .filters-row{ grid-template-columns: 1fr 1fr; max-width:none; }
+  }
+  @media (max-width: 520px){
+    .filters-row{ grid-template-columns: 1fr; }
+    .phone{ width:100%; }
+    .btn-check{ width:100%; }
+  }
 </style>
 </head>
 
 <body>
 
-<div class="header">
-    Synevo Customers Support
-</div>
+<!-- ==================== PAGE 1 ==================== -->
+<section id="page1" class="page active">
+  <div class="topbar">
+    <div class="brand">Synevo <span class="light">Customers Support</span></div>
+    <div class="spacer"></div>
+    <div class="gear">⚙</div>
+  </div>
 
-<div class="buttons">
-    <button class="button">Запис на спермограму</button>
-    <button class="button">Оформлення замовлення</button>
-    <button class="button">Лікарські консультації</button>
-</div>
+  <div class="tabs">
+    <button class="tab">Запис на спермограму</button>
+    <button class="tab">Оформлення замовлення</button>
+    <button class="tab">Лікарські консультації</button>
+  </div>
 
-<div class="filters">
-    <input type="text" placeholder="Телефон">
-    <input type="text" placeholder="Номер замовлення">
-    <input type="text" placeholder="Штрих-код">
-    <input type="text" placeholder="Номер направлення">
-</div>
+  <div class="filters">
+    <div class="filters-row">
+      <input class="f" type="text" placeholder="Телефон" />
+      <input class="f" type="text" placeholder="Номер замовлення" />
+      <input class="f" type="text" placeholder="Штрих-код" />
+      <input id="refInput" class="f" type="text" inputmode="numeric" placeholder="Номер направлення" />
+    </div>
+  </div>
 
-<div class="table-container">
-<table>
-    <thead>
+  <div class="table-wrap">
+    <table class="grid">
+      <thead>
         <tr>
-            <th>Дата замовлення</th>
-            <th>Код</th>
-            <th>ШК</th>
-            <th>Статус</th>
-            <th>Клієнт</th>
-            <th>ДН</th>
-            <th>Email</th>
-            <th>Сума</th>
-            <th>Послуги</th>
+          <th class="w-date">Дата замовлення</th>
+          <th class="w-code">Код</th>
+          <th class="w-bar">ШК</th>
+          <th class="w-status">Статус</th>
+          <th class="w-client">Клієнт</th>
+          <th class="w-dn">ДН</th>
+          <th class="w-email">Email</th>
+          <th class="w-sum">Сума</th>
+          <th class="w-serv">Послуги</th>
         </tr>
-    </thead>
-    <tbody>
-        <script>
-            for (let i = 0; i < 10; i++) {
-                document.write(
-                    "<tr>" +
-                    "<td><input></td>".repeat(9) +
-                    "</tr>"
-                );
-            }
-        </script>
-    </tbody>
-</table>
-</div>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ==================== PAGE 2 ==================== -->
+<section id="page2" class="page">
+  <div class="topbar">
+    <div class="brand">Synevo <span class="light">Customers Support</span></div>
+    <div class="spacer"></div>
+    <div class="gear">⚙</div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <div id="btnClose" class="close" title="Назад">×</div>
+      <div class="panel-title">Оформлення направлення НСЗУ</div>
+    </div>
+
+    <div class="panel-body">
+<div class="lookup">
+        <input id="phoneInput" class="phone" type="text" placeholder="Телефон" />
+        <button class="btn-check" id="btnCheck">Перевірити</button>
+      </div>
+
+      <div class="info">
+        <b>Данні направлення:</b>
+        <span id="patientLine">Руслана Сергіївна Безвюк, дата народження: 29.05.2001, стать: Жіноча</span>
+      </div>
+
+      <div class="section-title">Доступні для замовлення послуги</div>
+
+      <div class="services">
+        <div class="services-head">
+          <div>Послуга</div>
+          <div style="text-align:right;">Ціна</div>
+        </div>
+
+        <div class="service-row">
+          <div class="svc-name">
+            <b>10430.</b> Пакет №528.17 (Печінкові проби. Функція печінки: АЛТ, АСТ, ГГТ, Лужна фосфатаза,
+            Білірубін загал. і й там прямий)
+          </div>
+          <div class="svc-price">1050 грн.</div>
+        </div>
+
+        <div class="service-row">
+          <div class="svc-name"><b>1042.</b> Аланінамінотрансфераза (АЛТ)</div>
+          <div class="svc-price">190 грн.</div>
+        </div>
+
+        <div class="fake-scroll" aria-hidden="true"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // build dense table rows
+  (function buildRows(){
+    const tb = document.getElementById('tbody');
+    for(let i=0;i<12;i++){
+      const tr = document.createElement('tr');
+      for(let c=0;c<9;c++){
+        const td = document.createElement('td');
+        const inp = document.createElement('input');
+        inp.className = 'cell';
+        td.appendChild(inp);
+        tr.appendChild(td);
+      }
+      tb.appendChild(tr);
+    }
+  })();
+
+  function onlyDigits(s){ return (s || '').replace(/\D/g,''); }
+
+  function formatRef(digits){
+    const d = onlyDigits(digits).slice(0,16);
+    const parts = [];
+    for(let i=0;i<d.length;i+=4) parts.push(d.slice(i,i+4));
+    return parts.join('-');
+  }
+
+  function showPage(id){
+    document.getElementById('page1').classList.remove('active');
+    document.getElementById('page2').classList.remove('active');
+    document.getElementById(id).classList.add('active');
+  }
+
+  // ENTER ONLY on "Номер направлення"
+  const refInput = document.getElementById('refInput');
+
+  refInput.addEventListener('input', () => {
+    const digits = onlyDigits(refInput.value);
+    refInput.value = formatRef(digits);
+  });
+
+  refInput.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter'){
+      const digits = onlyDigits(refInput.value);
+      e.preventDefault();
+      if(digits.length === 16){
+        window.__refNumber = formatRef(digits);
+        showPage('page2');
+      }
+    }
+  });
+
+  document.getElementById('btnClose').addEventListener('click', () => showPage('page1'));
+  document.getElementById('btnCheck').addEventListener('click', () => document.getElementById('phoneInput').blur());
+</script>
 
 </body>
 </html>
