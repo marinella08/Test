@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<title>Customer Support — Test UI</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #1f5fa8;
+    color: #fff;
+}
+
+.header {
+    padding: 12px 20px;
+    background: #1b4f8a;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* ===== КНОПКИ В ОДИН РЯД ===== */
+.buttons {
+    padding: 10px 20px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.button {
+    background: #f4c430;
+    color: #000;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+/* ===== ФІЛЬТРИ ===== */
+.filters {
+    display: flex;
+    gap: 10px;
+    padding: 10px 20px;
+}
+
+.filters input {
+    padding: 8px;
+    border-radius: 4px;
+    border: none;
+    width: 180px;
+}
+
+/* ===== ТАБЛИЦЯ ===== */
+.table-container {
+    padding: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #2b6fb9;
+}
+
+th, td {
+    border: 1px solid #1b4f8a;
+    padding: 6px;
+    text-align: center;
+}
+
+th {
+    background: #1b4f8a;
+    font-size: 13px;
+}
+
+td input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: #fff;
+    text-align: center;
+    outline: none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    Synevo Customers Support
+</div>
+
+<div class="buttons">
+    <button class="button">Запис на спермограму</button>
+    <button class="button">Оформлення замовлення</button>
+    <button class="button">Лікарські консультації</button>
+</div>
+
+<div class="filters">
+    <input type="text" placeholder="Телефон">
+    <input type="text" placeholder="Номер замовлення">
+    <input type="text" placeholder="Штрих-код">
+    <input type="text" placeholder="Номер направлення">
+</div>
+
+<div class="table-container">
+<table>
+    <thead>
+        <tr>
+            <th>Дата замовлення</th>
+            <th>Код</th>
+            <th>ШК</th>
+            <th>Статус</th>
+            <th>Клієнт</th>
+            <th>ДН</th>
+            <th>Email</th>
+            <th>Сума</th>
+            <th>Послуги</th>
+        </tr>
+    </thead>
+    <tbody>
+        <script>
+            for (let i = 0; i < 10; i++) {
+                document.write(
+                    "<tr>" +
+                    "<td><input></td>".repeat(9) +
+                    "</tr>"
+                );
+            }
+        </script>
+    </tbody>
+</table>
+</div>
+
+</body>
+</html>
